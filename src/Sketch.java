@@ -7,7 +7,7 @@ import processing.core.PApplet;
 public class Sketch extends PApplet {
 
     /* DECLARE GLOBAL VARIABLES */
-    int rarity = 3; /* (1 = common, 2 = uncommon, 3 = rare, 4 = super rare,
+    int rarity = 1; /* (1 = common, 2 = uncommon, 3 = rare, 4 = super rare,
     5 = epic, 6 = mythic, 7 = legendary, 8 = ultra) */
     int circleX = 600;
     int circleY = 400;
@@ -46,11 +46,19 @@ public class Sketch extends PApplet {
         }
     }
 
+    public void displayRarity(String rarityDisplayText) {
+        fill(0);                            // Black fill
+        textSize(100);                      // Text size
+        textAlign(CENTER);                  // Make text appear in center
+        text(rarityDisplayText, (width / 2), 110);       // Display instructions for ball control
+    }
+
     public void common() {
         background(220, 252, 249);  // Re-draw background to erase previous frame
         fill(255, 208, 67);         // Yellow fill
         strokeWeight(5);            // Outline thickness
-        circle(circleX, circleY, circleRadius * 2);      
+        circle(circleX, circleY, circleRadius * 2);
+        displayRarity(rarityText[0]);      
     }
 
     public void uncommon() {
@@ -66,5 +74,7 @@ public class Sketch extends PApplet {
         strokeWeight(5);            // Outline thickness
         circle(circleX, circleY, circleRadius * 2);      
     }
+
+    
 
 }
