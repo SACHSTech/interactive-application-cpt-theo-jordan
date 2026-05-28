@@ -1,29 +1,30 @@
 import processing.core.PApplet;
 
 /**
- * Template for programs with Processing graphics output.
- * @author Your Name
+ * REPLACE ME LATER
+ * @author Theodore Lee and Jordan Lam
  */
 public class Sketch extends PApplet {
     public static void main(String[] args) {
         PApplet.main("Sketch");
     }
 
+    /* CANVAS */
     @Override
     public void settings() {
-        size(600, 400); 
+        size(1200, 800); 
     }
 
+    /* SETUP */ 
     @Override
     public void setup() {
-
+        background(220, 252, 249);  // Light Cyan
     }
 
+    /* ANIMATION */ 
     @Override
     public void draw() {
 
     }
-
-    /** Additional helper methods below */
 
 }
