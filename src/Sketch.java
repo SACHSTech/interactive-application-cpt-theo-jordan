@@ -9,7 +9,7 @@ import processing.core.PApplet;
 public class Sketch extends PApplet {
 
     /* DECLARE GLOBAL VARIABLES */
-    int rarity = 1;  // (1 = common, 2 = uncommon..., 8 = ultra)
+    int rarity = 0;  // (1 = common, 2 = uncommon..., 8 = ultra)
     int circleX = 600;
     int circleY = 400;
     int circleRadius = 250;
@@ -37,9 +37,34 @@ public class Sketch extends PApplet {
     /* ANIMATION */ 
     @Override
     public void draw() {
-        decideRarity(rarity);  // Background and text of current rarity
-        drawSticker();
-        displayScore(score);
+
+        while (rarity == 0) {  
+            displayInstructions();
+        }
+
+        if (rarity != 0) {
+            decideRarity(rarity);  // Background and text of current rarity
+            drawSticker();
+            displayScore(score);
+        }
+    }
+
+    public void displayInstructions() {
+        fill(0);            // Black
+        textSize(100); 
+        textAlign(CENTER);  // Center text
+        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", (width / 2), 110);  // Display intructions
+    }
+
+    /**
+     * Displays text depending on rarity
+     * @param rarityDisplayText text to display
+    */
+    public void displayRarity(String rarityDisplayText) {
+        fill(0);                                    // Black
+        textSize(100); 
+        textAlign(CENTER);                          // Center text
+        text(rarityDisplayText, (width / 2), 110);  // Display rarity
     }
 
     /**  
@@ -67,17 +92,6 @@ public class Sketch extends PApplet {
     }
 
     /**
-     * Displays text depending on rarity
-     * @param rarityDisplayText text to display
-    */
-    public void displayRarity(String rarityDisplayText) {
-        fill(0);                                    // Black
-        textSize(100); 
-        textAlign(CENTER);                          // Center text
-        text(rarityDisplayText, (width / 2), 110);  // Display rarity
-    }
-
-    /**
      * Displays current score
      * @param clickScore current # of clicks
      */
@@ -92,6 +106,10 @@ public class Sketch extends PApplet {
      * Checks if sticker is clicked, adds to score, changes rarity when certain # of clicks reached
      */
     public void mousePressed() {
+       if (rarity == 0) {
+            rarity++;
+       }
+
        float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
 
        if (distanceMiddleCircle < circleRadius) {  // Checks if mouse is clicked inside sticker radius
