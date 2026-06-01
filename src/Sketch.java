@@ -20,8 +20,9 @@ public class Sketch extends PApplet {
     /* CLICK VARIABLES */ 
     int score = 0;
     int[] clicks = {0, 10, 30, 60, 100, 150, 200, 300, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
-    String lastClick = "";  // Blank string to be hidden
-    
+    String lastClick = "thedore";  // Blank string to be hidden
+    float lastClickX = 0;
+    float lastClickY = 0;
 
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
@@ -43,7 +44,7 @@ public class Sketch extends PApplet {
     /* ANIMATION */ 
     @Override
     public void draw() {
-
+        
         if (rarity == 0) {  
             displayInstructions();
         }
@@ -52,6 +53,7 @@ public class Sketch extends PApplet {
             decideRarity(rarity);  // Background and text of current rarity
             drawSticker();
             displayScore(score);
+            displayLastClick(lastClick);
         }
     }
 
@@ -86,14 +88,14 @@ public class Sketch extends PApplet {
 
     /**
      * Displays amount of clicks counted last
-     * @param clickScore current # of clicks
+     * @param lastClickText current # of clicks
      */
-    // public void displayLastClick(String ) {
-    //     fill(0);          // Black 
-    //     textSize(70);   
-    //     textAlign(LEFT);  // Align text to left
-    //     text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks WHAT IS THIS 
-    // }
+    public void displayLastClick(String lastClickText) {
+        fill(0);          // Black 
+        textSize(70);   
+        textAlign(LEFT);  // Align text to left
+        text(lastClickText, lastClickX, lastClickY);  // Display # of clicks 
+    }
 
     /**  
      * Determines which rarity method to run depending on the current rarity
@@ -127,6 +129,9 @@ public class Sketch extends PApplet {
 
        if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
             score++;
+            lastClick = "+ " + 1;
+            lastClickX = random(circleX - 100, circleX + 100);
+            lastClickY = random(circleY - 100, circleY + 100);
             if (score >= clicks[rarity]) {  // Check if current score is large enough to upgrade to next rarity
                 rarity++;  // Changes Rarity
             }
