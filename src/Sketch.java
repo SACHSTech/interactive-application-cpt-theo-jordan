@@ -8,14 +8,20 @@ import processing.core.PApplet;
  */
 public class Sketch extends PApplet {
 
-    /* DECLARE GLOBAL VARIABLES */
+    /* RARITY VARIABLES */
     int rarity = 0;  // (1 = common, 2 = uncommon..., 8 = ultra)
+    String[] rarityText = {"Common", "Uncommon", "Rare", "Super Rare", "Epic", "Mythic", "Legendary", "Ultra"};
+
+    /* STICKER VARIABLES */ 
     int circleX = 600;
     int circleY = 400;
     int circleRadius = 250;
+
+    /* CLICK VARIABLES */ 
     int score = 0;
-    String[] rarityText = {"Common", "Uncommon", "Rare", "Super Rare", "Epic", "Mythic", "Legendary", "Ultra"};
     int[] clicks = {0, 10, 30, 60, 100, 150, 200, 300, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
+    String lastClick = "";  // Blank string to be hidden
+    
 
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
@@ -38,7 +44,7 @@ public class Sketch extends PApplet {
     @Override
     public void draw() {
 
-        while (rarity == 0) {  
+        if (rarity == 0) {  
             displayInstructions();
         }
 
@@ -51,9 +57,9 @@ public class Sketch extends PApplet {
 
     public void displayInstructions() {
         fill(0);            // Black
-        textSize(100); 
+        textSize(60); 
         textAlign(CENTER);  // Center text
-        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", (width / 2), 110);  // Display intructions
+        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", 600, 400);  // Display intructions
     }
 
     /**
@@ -66,6 +72,28 @@ public class Sketch extends PApplet {
         textAlign(CENTER);                          // Center text
         text(rarityDisplayText, (width / 2), 110);  // Display rarity
     }
+
+    /**
+     * Displays current score
+     * @param clickScore current # of clicks
+     */
+    public void displayScore(int clickScore) {
+        fill(0);          // Black 
+        textSize(70);   
+        textAlign(LEFT);  // Align text to left
+        text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks
+    }
+
+    /**
+     * Displays amount of clicks counted last
+     * @param clickScore current # of clicks
+     */
+    // public void displayLastClick(String ) {
+    //     fill(0);          // Black 
+    //     textSize(70);   
+    //     textAlign(LEFT);  // Align text to left
+    //     text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks WHAT IS THIS 
+    // }
 
     /**  
      * Determines which rarity method to run depending on the current rarity
@@ -91,33 +119,22 @@ public class Sketch extends PApplet {
         }
     }
 
-    /**
-     * Displays current score
-     * @param clickScore current # of clicks
-     */
-    public void displayScore(int clickScore) {
-        fill(0);          // Black 
-        textSize(70);   
-        textAlign(LEFT);  // Align text to left
-        text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks
-    }
-
     /** 
      * Checks if sticker is clicked, adds to score, changes rarity when certain # of clicks reached
      */
     public void mousePressed() {
-       if (rarity == 0) {
-            rarity++;
-       }
-
        float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
 
-       if (distanceMiddleCircle < circleRadius) {  // Checks if mouse is clicked inside sticker radius
+       if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
             score++;
             if (score >= clicks[rarity]) {  // Check if current score is large enough to upgrade to next rarity
                 rarity++;  // Changes Rarity
             }
        } 
+
+       if (rarity == 0) {
+            rarity++;  // Set rarity to one once game starts
+       }
     }
 
     // Base of Sticker
