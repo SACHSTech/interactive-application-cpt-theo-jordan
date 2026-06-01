@@ -154,22 +154,24 @@ public class Sketch extends PApplet {
 
     // Draw Shop Button
     public void drawShop() {
-        // BUTTON
-        fill(25);  // Gray fill
-        strokeWeight(5);     // Outline thickness
-        rect(shopX, shopY, 350, 160); 
+        if (rarity >= 1 && rarity < 8){
+            // BUTTON
+            fill(25);  // Gray fill
+            strokeWeight(5);     // Outline thickness
+            rect(shopX, shopY, 350, 160); 
         
-        // UPGRADE TEXT
-        fill(255);          // Black 
-        textSize(70);   
-        textAlign(CENTER);  // Align text to center
-        text("UPGRADE", (width - 225), (height - 100)); 
+            // UPGRADE TEXT
+            fill(255);          // Black 
+            textSize(70);   
+            textAlign(CENTER);  // Align text to center
+            text("UPGRADE", (width - 225), (height - 100)); 
 
-        // REQUIRED CLICKS TEXT
-        fill(0);          // Black 
-        textSize(30);   
-        textAlign(CENTER);  // Align text to center
-        text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required to upgrade
+            // REQUIRED CLICKS TEXT
+            fill(0);          // Black 
+            textSize(30);   
+            textAlign(CENTER);  // Align text to center
+            text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required to upgrade
+        }
     }
 
     // Base of Sticker
