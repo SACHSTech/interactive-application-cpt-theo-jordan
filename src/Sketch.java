@@ -24,6 +24,10 @@ public class Sketch extends PApplet {
     float lastClickX = 0;
     float lastClickY = 0;
 
+    /* SHOP VARIABLES */
+    int shopX = 800;
+    int shopY = 600;
+
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
         PApplet.main("Sketch");
@@ -62,7 +66,7 @@ public class Sketch extends PApplet {
         fill(0);            // Black
         textSize(60); 
         textAlign(CENTER);  // Center text
-        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", 600, 400);  // Display intructions
+        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", width / 2, height / 2);  // Display intructions
     }
 
     /**
@@ -126,24 +130,26 @@ public class Sketch extends PApplet {
      * Checks if sticker is clicked, adds to score, changes rarity when certain # of clicks reached
      */
     public void mousePressed() {
-       float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
+        float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
 
-       if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
+        if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
             score++;
             lastClick = "+ " + 1;
             lastClickX = random(circleX - 100, circleX + 100);
             lastClickY = random(circleY - 100, circleY + 100);
+        } 
+
+        if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)){
             if (score >= clicks[rarity]) {  // Check if current score is large enough to upgrade to next rarity
+                score -= clicks[rarity];
                 rarity++;  // Changes Rarity
             }
-       } 
-
-       if (mouseX )
+        }
 
         // Remove Instructions
-       if (rarity == 0) {
+        if (rarity == 0) {
             rarity++;  // Set rarity to one once game starts
-       }
+        }
     }
 
     // Draw Shop Button
@@ -151,7 +157,7 @@ public class Sketch extends PApplet {
         // BUTTON
         fill(25);  // Gray fill
         strokeWeight(5);     // Outline thickness
-        rect((width - 400), (height - 200), 350, 160); 
+        rect(shopX, shopY, 350, 160); 
         
         // UPGRADE TEXT
         fill(255);          // Black 
