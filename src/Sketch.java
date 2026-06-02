@@ -27,6 +27,7 @@ public class Sketch extends PApplet {
     /* SHOP VARIABLES */
     int shopX = 800;
     int shopY = 600;
+    int multiplier = 1; 
 
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
@@ -59,6 +60,7 @@ public class Sketch extends PApplet {
             displayScore(score);
             displayLastClick(lastClick);
             drawShop();
+            displayMultiplier(multiplier);
         }
     }
 
@@ -89,6 +91,17 @@ public class Sketch extends PApplet {
         textSize(70);   
         textAlign(LEFT);  // Align text to left
         text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks
+    }
+
+    /**
+     * Displays current multiplier
+     * @param clickMultiplier current multiplier
+     */
+    public void displayMultiplier(int clickMultiplier) {
+        fill(0);          // Black 
+        textSize(50);   
+        textAlign(LEFT);  // Align text to left
+        text("Multipler: x" + clickMultiplier, width - 310, height - 500);  // Display multiplier
     }
 
     /**
