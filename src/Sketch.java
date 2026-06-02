@@ -19,7 +19,7 @@ public class Sketch extends PApplet {
 
     /* CLICK VARIABLES */ 
     int score = 0;
-    int[] clicks = {0, 10, 30, 60, 100, 150, 200, 300, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
+    int[] clicks = {0, 10, 40, 150, 400, 1000, 2500, 10000, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
     String lastClick = "thedore";  // Blank string to be hidden
     float lastClickX = 0;
     float lastClickY = 0;
@@ -99,7 +99,7 @@ public class Sketch extends PApplet {
      */
     public void displayMultiplier(int clickMultiplier) {
         fill(0);          // Black 
-        textSize(50);   
+        textSize(40);   
         textAlign(LEFT);  // Align text to left
         text("Multipler: x" + clickMultiplier, width - 310, height - 500);  // Display multiplier
     }
@@ -111,7 +111,7 @@ public class Sketch extends PApplet {
     public void displayLastClick(String lastClickText) {
         fill(0);          // Black 
         textSize(70);   
-        textAlign(LEFT);  // Align text to left
+        textAlign(CENTER);  // Align text to center
         text(lastClickText, lastClickX, lastClickY);  // Display # of clicks 
     }
 
@@ -146,16 +146,17 @@ public class Sketch extends PApplet {
         float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
 
         if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
-            score++;
-            lastClick = "+ " + 1;
-            lastClickX = random(circleX - 100, circleX + 100);
-            lastClickY = random(circleY - 100, circleY + 100);
+            score += (1 * multiplier);  // Add 1 score multiplied by current multiplier
+            lastClick = "+ " + (1 * multiplier);  // Display previous amount of clicks
+            lastClickX = random(circleX - 100, circleX + 100);  // Random x location
+            lastClickY = random(circleY - 100, circleY + 100);  // Random y location
         } 
 
         if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)){
             if (score >= clicks[rarity]) {  // Check if current score is large enough to upgrade to next rarity
-                score -= clicks[rarity];
+                score -= clicks[rarity];  // Deduct price of rarity from current score
                 rarity++;  // Changes Rarity
+                multiplier *= 2;  // Multiplies multiplier by 2
             }
         }
 
