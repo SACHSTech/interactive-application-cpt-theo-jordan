@@ -19,8 +19,8 @@ public class Sketch extends PApplet {
 
     /* CLICK VARIABLES */ 
     int score = 0;
-    int[] clicks = {0, 10, 40, 150, 400, 1000, 2500, 10000, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
-    String lastClick = "thedore";  // Blank string to be hidden
+    int[] clicks = {0, 10, 40, 150, 400, 1000, 2500, 10000, 25000, Integer.MAX_VALUE};  // Clicks required to upgrade rarity (Index match up to the rarity #)
+    String lastClick = "";  // Blank string to be hidden
     float lastClickX = 0;
     float lastClickY = 0;
 
@@ -28,7 +28,7 @@ public class Sketch extends PApplet {
     int shopX = 800;
     int shopY = 600;
     int multiplier = 1; 
-    // int rebirth = 1; --> if lunch is found :)
+    int rebirth = 1; 
 
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
@@ -60,7 +60,7 @@ public class Sketch extends PApplet {
             displayScore(score);
             displayLastClick(lastClick);
             drawShop();
-            displayMultiplier(multiplier);
+            displayMultiplier(1 * multiplier * rebirth);
         }
     }
 
@@ -146,17 +146,23 @@ public class Sketch extends PApplet {
         float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
 
         if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
-            score += (1 * multiplier);  // Add 1 score multiplied by current multiplier
-            lastClick = "+ " + (1 * multiplier);  // Display previous amount of clicks
+            score += (1 * multiplier * rebirth);  // Add 1 score multiplied by current multiplier
+            lastClick = "+ " + (1 * multiplier * rebirth);  // Display previous amount of clicks
             lastClickX = random(circleX - 100, circleX + 100);  // Random x location
             lastClickY = random(circleY - 100, circleY + 100);  // Random y location
         } 
 
         if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)){
-            if (score >= clicks[rarity]) {  // Check if current score is large enough to upgrade to next rarity
+            if (score >= clicks[rarity] && rarity < 8 && rarity > 0) {  // Check if current score is large enough to upgrade to next rarity
                 score -= clicks[rarity];  // Deduct price of rarity from current score
                 rarity++;  // Changes Rarity
                 multiplier *= 2;  // Multiplies multiplier by 2
+            } else if (rarity == 8 && score >= clicks[rarity]) {
+                score = 0;
+                rarity = 1;
+                multiplier = 1;
+                rebirth += 1;
+                clicks[8] += 10000;
             }
         }
 
@@ -168,24 +174,29 @@ public class Sketch extends PApplet {
 
     // Draw Shop Button
     public void drawShop() {
-        if (rarity >= 1 && rarity < 8){
-            // BUTTON
-            fill(25);  // Gray fill
-            strokeWeight(5);     // Outline thickness
-            rect(shopX, shopY, 350, 160); 
-        
-            // UPGRADE TEXT
-            fill(255);          // Black 
-            textSize(70);   
-            textAlign(CENTER);  // Align text to center
-            text("UPGRADE", (width - 225), (height - 100)); 
 
-            // REQUIRED CLICKS TEXT
-            fill(0);          // Black 
-            textSize(30);   
-            textAlign(CENTER);  // Align text to center
-            text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required to upgrade
+        // BUTTON
+        fill(25);  // Gray fill
+        strokeWeight(5);     // Outline thickness
+        rect(shopX, shopY, 350, 160); 
+
+        // REQUIRED CLICKS TEXT
+        fill(0);          // Black 
+        textSize(30);   
+        textAlign(CENTER);  // Align text to center
+        text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required to upgrade
+
+        // UPGRADE/REBIRTH TEXT
+        fill(255);          // Black 
+        textSize(70);   
+        textAlign(CENTER);  // Align text to center
+
+        if (rarity >= 1 && rarity < 8) {
+            text("UPGRADE", (width - 225), (height - 100)); 
+        } else {
+            text("REBIRTH", (width - 225), (height - 100)); 
         }
+        
     }
 
     // Base of Sticker
