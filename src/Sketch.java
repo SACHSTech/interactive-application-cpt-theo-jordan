@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PFont;
 
 /**
  * In this game, the player clicks the circle sticker in order to upgrade it to a new rarity (new background + text). 
@@ -6,7 +7,11 @@ import processing.core.PApplet;
  * player does not click the sticker and clicks the background instead, it will not count as a click. 
  * @author Theodore Lee and Jordan Lam 
  */
+
+
+
 public class Sketch extends PApplet {
+    PFont brawlFont;  // Creates custom font variable
 
     /* RARITY VARIABLES */
     int rarity = 0;  // (1 = common, 2 = uncommon..., 8 = ultra)
@@ -45,6 +50,9 @@ public class Sketch extends PApplet {
     @Override
     public void setup() {
         background(220, 252, 249);  // Light cyan (common rarity)
+
+        brawlFont = createFont("LilitaOne-Regular.ttf", 32);  // Create custom font
+        textFont(brawlFont);  // Makes all text custom font
     }
 
     /* ANIMATION */ 
@@ -162,7 +170,7 @@ public class Sketch extends PApplet {
                 rarity = 1;
                 multiplier = 1;
                 rebirth += 1;
-                clicks[8] += 10000;
+                clicks[8] += 5000;
             }
         }
 
