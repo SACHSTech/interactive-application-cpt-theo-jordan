@@ -107,7 +107,7 @@ public class Sketch extends PApplet {
      * @param clickScore current # of clicks
      */
     public void displayScore(int clickScore) {
-        fill(0);          // Black 
+        fill(0);  // Black 
         textSize(70);   
         textAlign(LEFT); 
         text("Clicks: " + clickScore, width - 1150, height - 50);  // Display total # of clicks
@@ -118,7 +118,7 @@ public class Sketch extends PApplet {
      * @param clickMultiplier current multiplier
      */
     public void displayMultiplier(int clickMultiplier) {
-        fill(0);          // Black 
+        fill(0);  // Black 
         textSize(35);   
         textAlign(LEFT); 
         text("Multiplier: x" + clickMultiplier, width - 310, height - 500);  // Multiplier text
@@ -152,19 +152,16 @@ public class Sketch extends PApplet {
      * Checks if sticker is clicked, adds to score, changes rarity when certain # of clicks reached
      */
     public void mousePressed() {
-        float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between the circle and mouse
+        float distanceMiddleCircle = dist(mouseX, mouseY, circleX, circleY);  // Distance between circle and mouse
 
         if (distanceMiddleCircle < circleRadius && rarity != 0) {  // Checks if mouse is clicked inside sticker radius
-            score += (1 * multiplier * rebirth);  // Add 1 score multiplied by current multiplier
-            lastClick = "+ " + (1 * multiplier * rebirth);  // Display previous amount of clicks
-            lastClickX = random(circleX - 100, circleX + 100);  // Random x location
-            lastClickY = random(circleY - 100, circleY + 100);  // Random y location
+            addClick();
         } 
 
-        if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)){
-            if (score >= clicks[rarity] && rarity < 8 && rarity > 0) {  // Check if current score is large enough to upgrade to next rarity
+        if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)) { // Checks if mouse is clicked inside shop button
+            if (score >= clicks[rarity] && rarity < 8 && rarity > 0) {  // Check if score is large enough to upgrade to next rarity if rarity is 1 to 7
                 upgrade();
-            } else if (rarity == 8 && score >= clicks[rarity]) {
+            } else if (rarity == 8 && score >= clicks[rarity]) { // Check if score is large enough to rebirth if rarity is 8
                 rebirth();
             }
         }
@@ -173,6 +170,14 @@ public class Sketch extends PApplet {
         if (rarity == 0) {
             rarity++;  // Set rarity to common once game starts
         }
+    }
+
+    // Adds clicks to score based on multiplier and displays the previous click
+    public void addClick() {
+        score += (1 * multiplier * rebirth);                // Add 1 score multiplied by current multiplier
+        lastClick = "+ " + (1 * multiplier * rebirth);      // Display previous amount of clicks
+        lastClickX = random(circleX - 100, circleX + 100);  // Random x location
+        lastClickY = random(circleY - 100, circleY + 100);  // Random y location
     }
 
     // Change Sticker to Next Rarity
@@ -193,7 +198,6 @@ public class Sketch extends PApplet {
 
     // Draw Shop Button
     public void drawShop() {
-
         // Button
         fill(25);         // Gray
         strokeWeight(5);  // Outline thickness
@@ -234,10 +238,9 @@ public class Sketch extends PApplet {
         circle(circleX - 100, circleY - 100, 75);
         circle(circleX + 100, circleY - 100, 75);
 
-        fill(0);  // Black
+        fill(0);   // Black
         circle(circleX - 100, circleY - 90, 30); 
         circle(circleX + 100, circleY - 90, 30); 
-
     }
 
     // Display Common Rarity
@@ -249,7 +252,6 @@ public class Sketch extends PApplet {
         // Mouth
         fill(215, 107, 120);  // Light Red
         arc(circleX, circleY + 125, 300, 250, PI, TWO_PI);
-
     }
 
     // Display Uncommon Rarity
