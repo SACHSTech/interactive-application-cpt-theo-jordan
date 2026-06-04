@@ -2,16 +2,16 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 /**
- * In this game, the player clicks the circle sticker in order to upgrade it to a new rarity (new background + text). 
- * Depending on the number of clicks (score), the sticker will change to the next rarity. However, if the 
- * player does not click the sticker and clicks the background instead, it will not count as a click. 
+ * In this immersive game, the player clicks the circle sticker in order to increase the number of clicks. When the player
+ * reaches a certain number of clicks they can upgrade the sticker (change background + increase multiplier + change rarity).
+ * The sticker can be upgraded all the way until ultra, which will let the player rebirth and reset all their clicks, but 
+ * in return give a slight multiplier boost. 
  * @author Theodore Lee and Jordan Lam 
  */
 
-
-
 public class Sketch extends PApplet {
-    PFont brawlFont;  // Creates custom font variable
+    /* CUSTOM FONT VARIABLE */ 
+    PFont brawlFont;  
 
     /* RARITY VARIABLES */
     int rarity = 0;  // (1 = common, 2 = uncommon..., 8 = ultra)
@@ -49,9 +49,9 @@ public class Sketch extends PApplet {
     /* SETUP */ 
     @Override
     public void setup() {
-        background(220, 252, 249);  // Light cyan (common rarity)
+        background(220, 252, 249);  // Light cyan 
 
-        brawlFont = createFont("LilitaOne-Regular.ttf", 32);  // Create custom font
+        brawlFont = createFont("LilitaOne-Regular.ttf", 32);  // Calls on custom font
         textFont(brawlFont);  // Makes all text custom font
     }
 
@@ -72,11 +72,12 @@ public class Sketch extends PApplet {
         }
     }
 
+    // Creates the Home Screen when Program Starts
     public void displayInstructions() {
         fill(0);            // Black
         textSize(60); 
-        textAlign(CENTER);  // Center text
-        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", width / 2, height / 2);  // Display intructions
+        textAlign(CENTER);
+        text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", width / 2, height / 2);  // Instructions
     }
 
     /**
@@ -86,8 +87,19 @@ public class Sketch extends PApplet {
     public void displayRarity(String rarityDisplayText) {
         fill(0);                                    // Black
         textSize(100); 
-        textAlign(CENTER);                          // Center text
-        text(rarityDisplayText, (width / 2), 110);  // Display rarity
+        textAlign(CENTER);
+        text(rarityDisplayText, (width / 2), 110);  // Rarity
+    }
+
+    /**
+     * Displays amount of clicks counted last
+     * @param lastClickText current # of clicks
+     */
+    public void displayLastClick(String lastClickText) {
+        fill(0);            // Black 
+        textSize(70);   
+        textAlign(CENTER); 
+        text(lastClickText, lastClickX, lastClickY);  // Display # of clicks on sticker
     }
 
     /**
@@ -97,8 +109,8 @@ public class Sketch extends PApplet {
     public void displayScore(int clickScore) {
         fill(0);          // Black 
         textSize(70);   
-        textAlign(LEFT);  // Align text to left
-        text("Clicks: " + clickScore, width - 1150, height - 50);  // Display # of clicks
+        textAlign(LEFT); 
+        text("Clicks: " + clickScore, width - 1150, height - 50);  // Display total # of clicks
     }
 
     /**
@@ -107,20 +119,9 @@ public class Sketch extends PApplet {
      */
     public void displayMultiplier(int clickMultiplier) {
         fill(0);          // Black 
-        textSize(40);   
-        textAlign(LEFT);  // Align text to left
-        text("Multipler: x" + clickMultiplier, width - 310, height - 500);  // Display multiplier
-    }
-
-    /**
-     * Displays amount of clicks counted last
-     * @param lastClickText current # of clicks
-     */
-    public void displayLastClick(String lastClickText) {
-        fill(0);          // Black 
-        textSize(70);   
-        textAlign(CENTER);  // Align text to center
-        text(lastClickText, lastClickX, lastClickY);  // Display # of clicks 
+        textSize(35);   
+        textAlign(LEFT); 
+        text("Multiplier: x" + clickMultiplier, width - 310, height - 500);  // Multiplier text
     }
 
     /**  
@@ -162,54 +163,64 @@ public class Sketch extends PApplet {
 
         if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)){
             if (score >= clicks[rarity] && rarity < 8 && rarity > 0) {  // Check if current score is large enough to upgrade to next rarity
-                score -= clicks[rarity];  // Deduct price of rarity from current score
-                rarity++;  // Changes Rarity
-                multiplier *= 2;  // Multiplies multiplier by 2
+                upgrade();
             } else if (rarity == 8 && score >= clicks[rarity]) {
-                score = 0;
-                rarity = 1;
-                multiplier = 1;
-                rebirth += 1;
-                clicks[8] += 5000;
+                rebirth();
             }
         }
 
         // Remove Instructions
         if (rarity == 0) {
-            rarity++;  // Set rarity to one once game starts
+            rarity++;  // Set rarity to common once game starts
         }
+    }
+
+    // Change Sticker to Next Rarity
+    public void upgrade() {
+        score -= clicks[rarity];  // Deduct price of rarity from current score
+        rarity++;                 // Changes rarity
+        multiplier *= 2;          // Multiplies multiplier by 2
+    }
+
+    // Rebirth
+    public void rebirth() {
+        score = 0;
+        rarity = 1;
+        multiplier = 1;
+        rebirth += 1;
+        clicks[8] += 5000;  // Adds 5000 to rebirth requirement each rebirth
     }
 
     // Draw Shop Button
     public void drawShop() {
 
-        // BUTTON
-        fill(25);  // Gray fill
-        strokeWeight(5);     // Outline thickness
+        // Button
+        fill(25);         // Gray
+        strokeWeight(5);  // Outline thickness
         rect(shopX, shopY, 350, 160); 
 
-        // REQUIRED CLICKS TEXT
-        fill(0);          // Black 
+        // Required Clicks Text
+        fill(0);  // Black 
         textSize(30);   
-        textAlign(CENTER);  // Align text to center
-        text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required to upgrade
+        textAlign(CENTER); 
+        text("Clicks Required: " + clicks[rarity], (width - 225), (height - 220));  // Display clicks required text
 
-        // UPGRADE/REBIRTH TEXT
-        fill(255);          // Black 
+        // Upgrade/Rebirth Text
+        fill(255);  // Black 
         textSize(70);   
-        textAlign(CENTER);  // Align text to center
+        textAlign(CENTER);
 
         if (rarity >= 1 && rarity < 8) {
             text("UPGRADE", (width - 225), (height - 100)); 
         } else {
-            text("REBIRTH", (width - 225), (height - 100)); 
+            text("REBIRTH", (width - 225), (height - 100));
         }
         
     }
 
     // Base of Sticker
     public void drawSticker() {
-        fill(255, 208, 67);  // Yellow fill
+        fill(255, 208, 67);  // Yellow 
         stroke(5);
         strokeWeight(5);     // Outline thickness
         circle(circleX, circleY, circleRadius * 2); 
