@@ -194,6 +194,7 @@ public class Sketch extends PApplet {
         multiplier = 1;
         rebirth += 1;
         clicks[8] += 5000;  // Adds 5000 to rebirth requirement each rebirth
+        lastClick = "";  // Hide last click text 
     }
 
     // Draw Shop Button
