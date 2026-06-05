@@ -225,10 +225,17 @@ public class Sketch extends PApplet {
 
     // Base of Sticker
     public void drawSticker() {
-        fill(255, 208, 67);  // Yellow 
-        stroke(5);
-        strokeWeight(5);     // Outline thickness
-        circle(circleX, circleY, circleRadius * 2); 
+        for (int i = 15; i >= 0; i--) {  // Loop 15 times
+            if (i == 0) {                // Final loop
+                fill(255, 208, 67);      // Yellow
+                stroke(0);
+                strokeWeight(5);
+            } else {
+                fill(30);  // Gray shadow 
+                noStroke();
+            }
+            circle(circleX + i, circleY + i, circleRadius * 2);  // Draw circle translated bottom right
+        }
         drawEyes();
     }
 
