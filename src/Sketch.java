@@ -33,7 +33,7 @@ public class Sketch extends PApplet {
     int shopX = 800;
     int shopY = 600;
     int multiplier = 1; 
-    int rebirth = 1; 
+    int rebirthMultiplier = 1; 
 
     /* RUNNING SKETCH */ 
     public static void main(String[] args) {
@@ -68,7 +68,7 @@ public class Sketch extends PApplet {
             displayScore(score);
             displayLastClick(lastClick);
             drawShop();
-            displayMultiplier(1 * multiplier * rebirth);
+            displayMultiplier(1 * multiplier * rebirthMultiplier);
         }
     }
 
@@ -174,8 +174,8 @@ public class Sketch extends PApplet {
 
     // Adds clicks to score based on multiplier and displays the previous click
     public void addClick() {
-        score += (1 * multiplier * rebirth);                // Add 1 score multiplied by current multiplier
-        lastClick = "+ " + (1 * multiplier * rebirth);      // Display previous amount of clicks
+        score += (1 * multiplier * rebirthMultiplier);                // Add 1 score multiplied by current multiplier
+        lastClick = "+ " + (1 * multiplier * rebirthMultiplier);      // Display previous amount of clicks
         lastClickX = random(circleX - 100, circleX + 100);  // Random x location
         lastClickY = random(circleY - 100, circleY + 100);  // Random y location
     }
@@ -192,7 +192,7 @@ public class Sketch extends PApplet {
         score = 0;
         rarity = 1;
         multiplier = 1;
-        rebirth += 1;
+        rebirthMultiplier += 1;
         clicks[8] += 5000;  // Adds 5000 to rebirth requirement each rebirth
         lastClick = "";  // Hide last click text 
     }
