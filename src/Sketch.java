@@ -16,11 +16,34 @@ public class Sketch extends PApplet {
     /* RARITY VARIABLES */
     int rarity = 0;  // (1 = common, 2 = uncommon..., 8 = ultra)
     String[] rarityText = {"Common", "Uncommon", "Rare", "Super Rare", "Epic", "Mythic", "Legendary", "Ultra"};
+    // Background colours for rarities
+    int[][] bgColours = {
+        {220, 252, 249},
+        {225, 255, 221},
+        {100, 255, 79},
+        {0, 150, 232},
+        {163, 0, 232},
+        {230, 0, 0},
+        {252, 255, 0},
+        {255, 0, 189}
+    };
 
     /* STICKER VARIABLES */ 
     int circleX = 600;
     int circleY = 400;
     int circleRadius = 250;
+    int[] mouthShape = {1, 1, 2, 3, 3, 3, 1, 1};  // (1 = arc, 2 = rectangle, 3 = circle)
+    // Parameters for mouth shapes
+    float[][] mouthParameters = {
+        {circleX, circleY + 125, 300, 250, PI, TWO_PI},
+        {circleX, circleY + 100, 250, 125, PI, TWO_PI},
+        {circleX - 150, circleY + 50, 300, 25},
+        {circleX, circleY + 100, 80},
+        {circleX, circleY + 60, 180},
+        {circleX, circleY + 80, 250},
+        {circleX, circleY + 50, 250, 125, 0, PI},
+        {circleX, circleY + 10, 380, 350, 0, PI}
+    };  
 
     /* CLICK VARIABLES */ 
     int score = 0;
@@ -64,8 +87,8 @@ public class Sketch extends PApplet {
         }
 
         if (rarity != 0) {
-            decideRarity(rarity);  // Background and text of current rarity
-            displayScore(score);
+            rarityLogic(rarity);  // Draws sticker, background, text, mouth shape for each rarity
+            displayScore(score); 
             displayLastClick(lastClick);
             drawShop();
             displayMultiplier(1 * multiplier * rebirthMultiplier);
@@ -125,26 +148,34 @@ public class Sketch extends PApplet {
     }
 
     /**  
-     * Determines which rarity method to run depending on the current rarity
-     * @param rarityIndicator the current rarity number
+     * Draws sticker, background, and mouth depending on current rarity
+     * @param rarityNumber the current rarity number
     */
-    public void decideRarity(int rarityIndicator) {
-        if (rarityIndicator == 1) {
-            common();
-        } else if (rarityIndicator == 2) {
-            uncommon();
-        } else if (rarityIndicator == 3) {
-            rare();
-        } else if (rarityIndicator == 4) {
-            superRare();
-        } else if (rarityIndicator == 5) {
-            epic();
-        } else if (rarityIndicator == 6) {
-            mythic();
-        } else if (rarityIndicator == 7) {
-            legendary();
-        } else if (rarityIndicator == 8) {
-            ultra();
+    public void rarityLogic(int rarityNumber) {
+        background(bgColours[rarityNumber - 1][0], bgColours[rarityNumber - 1][1], bgColours[rarityNumber - 1][2]);
+        displayRarity(rarityText[rarityNumber - 1]);  // Display rarity text
+        drawSticker();
+
+        // Mouth
+        fill(215, 107, 120);  // Light red
+
+        // Mouth shape (1 = arc, 2 = rectangle, 3 = circle)
+        switch (mouthShape[rarityNumber - 1]) {
+            case 1:
+                arc(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3], 
+                    mouthParameters[rarityNumber - 1][4], mouthParameters[rarityNumber - 1][5]);
+                break;
+
+            case 2:
+                rect(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3]);
+                break;
+
+            case 3:
+                circle(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2]);
+                break;
         }
     }
 
@@ -250,93 +281,4 @@ public class Sketch extends PApplet {
         circle(circleX - 100, circleY - 90, 30); 
         circle(circleX + 100, circleY - 90, 30); 
     }
-
-    // Display Common Rarity
-    public void common() {
-        background(220, 252, 249);  // Light blue
-        displayRarity(rarityText[0]);
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        arc(circleX, circleY + 125, 300, 250, PI, TWO_PI);
-    }
-
-    // Display Uncommon Rarity
-    public void uncommon() {
-        background(225, 255, 221);  // Light green
-        displayRarity(rarityText[1]);   
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        arc(circleX, circleY + 100, 250, 125, PI, TWO_PI);
-    }
-
-    // Display Rare Rarity
-    public void rare() {
-        background(100, 255, 79);  // Green
-        displayRarity(rarityText[2]);  
-        drawSticker(); 
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        rect(circleX - 150, circleY + 50, 300, 25);
-    }
-
-    // Display Super Rare Rarity
-    public void superRare() {
-        background(0, 150, 232);  // Blue
-        displayRarity(rarityText[3]);   
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        circle(circleX, circleY + 100, 80);
-    }
-
-    // Display Epic Rarity
-    public void epic() {
-        background(163, 0, 232);  // Dark purple
-        displayRarity(rarityText[4]);
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        circle(circleX, circleY + 60, 180);
-    }
-
-    // Display Mythic Rarity
-    public void mythic() {
-        background(230, 0, 0);  // Red
-        displayRarity(rarityText[5]);  
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        circle(circleX, circleY + 80, 250);
-    }
-
-    // Display Legendary Rarity
-    public void legendary() {
-        background(252, 255, 0);  // Yellow
-        displayRarity(rarityText[6]);   
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        arc(circleX, circleY + 50, 250, 125, 0, PI);
-    }
-
-    // Display Ultra Rarity
-    public void ultra() {
-        background(255, 0, 189);  // Light purple
-        displayRarity(rarityText[7]);   
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light Red
-        arc(circleX, circleY + 10, 380, 350, 0, PI);
-    }
-
 }
