@@ -18,4 +18,6 @@ _Clicks_ are added to the score counter after each click. Using said clicks, the
 - **Autoclicker** --> A function to allow the screen to click itself 
 
 ### External Assets
-**Font used:** [Lilita One Font](https://fonts.google.com/specimen/Lilita+One)
+**Lilita One Font**
+**Source:** [Lilita One Font](https://fonts.google.com/specimen/Lilita+One)
+**License:** Public Domain 
