@@ -81,7 +81,6 @@ public class Sketch extends PApplet {
     /* ANIMATION */ 
     @Override
     public void draw() {
-        
         if (rarity == 0) {  
             displayInstructions();
         }
@@ -97,7 +96,7 @@ public class Sketch extends PApplet {
 
     // Creates the Home Screen when Program Starts
     public void displayInstructions() {
-        fill(0);            // Black
+        fill(0);  // Black
         textSize(60); 
         textAlign(CENTER);
         text("Click the Sticker to Increase Score. \n To Start, Click the Screen...", width / 2, height / 2);  // Instructions
@@ -112,6 +111,45 @@ public class Sketch extends PApplet {
         textSize(100); 
         textAlign(CENTER);
         text(rarityDisplayText, (width / 2), 110);  // Rarity
+    }
+
+    /**  
+     * Draws sticker, background, and mouth depending on current rarity
+     * @param rarityNumber the current rarity number
+    */
+    public void rarityLogic(int rarityNumber) {
+        background(bgColours[rarityNumber - 1][0], bgColours[rarityNumber - 1][1], bgColours[rarityNumber - 1][2]);
+        displayRarity(rarityText[rarityNumber - 1]);  // Display rarity text
+        drawSticker();
+
+        // Mouth
+        fill(215, 107, 120);  // Light red
+
+        // Mouth shape (1 = arc, 2 = rectangle, 3 = circle)
+        switch (mouthShape[rarityNumber - 1]) {
+            case 1:
+                arc(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3], 
+                    mouthParameters[rarityNumber - 1][4], mouthParameters[rarityNumber - 1][5]);
+                break;
+
+            case 2:
+                rect(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3]);
+                break;
+
+            case 3:
+                circle(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
+                    mouthParameters[rarityNumber - 1][2]);
+                break;
+        }
+    }
+
+    // Change Sticker to Next Rarity
+    public void upgrade() {
+        score -= clicks[rarity];  // Deduct price of rarity from current score
+        rarity++;                 // Changes rarity
+        multiplier *= 2;          // Multiplies multiplier by 2
     }
 
     /**
@@ -147,38 +185,6 @@ public class Sketch extends PApplet {
         text("Multiplier: x" + clickMultiplier, width - 310, height - 500);  // Multiplier text
     }
 
-    /**  
-     * Draws sticker, background, and mouth depending on current rarity
-     * @param rarityNumber the current rarity number
-    */
-    public void rarityLogic(int rarityNumber) {
-        background(bgColours[rarityNumber - 1][0], bgColours[rarityNumber - 1][1], bgColours[rarityNumber - 1][2]);
-        displayRarity(rarityText[rarityNumber - 1]);  // Display rarity text
-        drawSticker();
-
-        // Mouth
-        fill(215, 107, 120);  // Light red
-
-        // Mouth shape (1 = arc, 2 = rectangle, 3 = circle)
-        switch (mouthShape[rarityNumber - 1]) {
-            case 1:
-                arc(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
-                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3], 
-                    mouthParameters[rarityNumber - 1][4], mouthParameters[rarityNumber - 1][5]);
-                break;
-
-            case 2:
-                rect(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
-                    mouthParameters[rarityNumber - 1][2], mouthParameters[rarityNumber - 1][3]);
-                break;
-
-            case 3:
-                circle(mouthParameters[rarityNumber - 1][0], mouthParameters[rarityNumber - 1][1], 
-                    mouthParameters[rarityNumber - 1][2]);
-                break;
-        }
-    }
-
     /** 
      * Checks if sticker is clicked, adds to score, changes rarity when certain # of clicks reached
      */
@@ -189,10 +195,10 @@ public class Sketch extends PApplet {
             addClick();
         } 
 
-        if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)) { // Checks if mouse is clicked inside shop button
+        if (shopX <= mouseX && mouseX <= (shopX + 350) && shopY <= mouseY && mouseY <= (shopY + 160)) {  // Checks if mouse is clicked inside shop button
             if (score >= clicks[rarity] && rarity < 8 && rarity > 0) {  // Check if score is large enough to upgrade to next rarity if rarity is 1 to 7
                 upgrade();
-            } else if (rarity == 8 && score >= clicks[rarity]) { // Check if score is large enough to rebirth if rarity is 8
+            } else if (rarity == 8 && score >= clicks[rarity]) {  // Check if score is large enough to rebirth if rarity is 8
                 rebirth();
             }
         }
@@ -211,21 +217,14 @@ public class Sketch extends PApplet {
         lastClickY = random(circleY - 100, circleY + 100);  // Random y location
     }
 
-    // Change Sticker to Next Rarity
-    public void upgrade() {
-        score -= clicks[rarity];  // Deduct price of rarity from current score
-        rarity++;                 // Changes rarity
-        multiplier *= 2;          // Multiplies multiplier by 2
-    }
-
     // Rebirth
     public void rebirth() {
-        score = 0;
+        score = 0;  // Resets game
         rarity = 1;
         multiplier = 1;
         rebirthMultiplier += 1;
         clicks[8] += 5000;  // Adds 5000 to rebirth requirement each rebirth
-        lastClick = "";  // Hide last click text 
+        lastClick = "";     // Hide last click text 
     }
 
     // Draw Shop Button
@@ -250,8 +249,7 @@ public class Sketch extends PApplet {
             text("UPGRADE", (width - 225), (height - 100)); 
         } else {
             text("REBIRTH", (width - 225), (height - 100));
-        }
-        
+        } 
     }
 
     // Base of Sticker
